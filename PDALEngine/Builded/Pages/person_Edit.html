@@ -9,8 +9,7 @@ person_Update_Sp
     <div   class="col-sm-4">
    
             <input type="text"   class="form-control" id="txtperson_Editname" placeholder=""  placeholder="" />
-       
-                                                                                       
+                                                                                                
       
                             
     </div>
@@ -18,8 +17,7 @@ person_Update_Sp
       :</label>
     <div   class="col-sm-4">
    
-       
-                                                                                       
+                                                                                                
       
             <select class="form-control" id="txtperson_Editgrade" >
                 <option value="0">رده سوم</option>
@@ -36,8 +34,7 @@ person_Update_Sp
       :</label>
     <div   class="col-sm-4">
    
-       
-                                                                                       
+                                                                                                
       
                   <select class="form-control" id="txtperson_Editcityid" ></select>
                       
@@ -46,8 +43,7 @@ person_Update_Sp
       :</label>
     <div   class="col-sm-4">
    
-       
-                                                                                          <select class="form-control" id="txtperson_Editsextype" >
+                                                                                                   <select class="form-control" id="txtperson_Editsextype" >
                 <option value="0">مرد</option>
                 <option value="1">زن</option>
               </select>
@@ -61,8 +57,7 @@ person_Update_Sp
       :</label>
     <div   class="col-sm-4">
    
-       
-                                                      <input type="Text"  onkeypress="return blockNonIntNumber(event)" placeholder="" moneytype="yes"  onkeyup="NumberInput(event,this)" class="form-control" id="txtperson_EditsalaryBase" placeholder="" />
+                                                               <input type="Text"  onkeypress="return blockNonIntNumber(event)" placeholder="" moneytype="yes"  onkeyup="NumberInput(event,this)" class="form-control" id="txtperson_EditsalaryBase" placeholder="" />
                                              
       
                             
@@ -71,8 +66,7 @@ person_Update_Sp
       :</label>
     <div   class="col-sm-4">
    
-       
-                              <input type="Number"  placeholder=""  class="form-control" id="txtperson_EditexamResult" placeholder="" />
+                                       <input type="Number"  placeholder=""  class="form-control" id="txtperson_EditexamResult" placeholder="" />
                                                                      
       
                             
@@ -83,8 +77,7 @@ person_Update_Sp
       :</label>
     <div   class="col-sm-4">
    
-       
-                                                                                       
+                                                                                                
       
                               <input  type="text"    onBlur="ReformatDate('txtperson_EditdateBrith')"  class="form-control" id="txtperson_EditdateBrith" placeholder="yyyy/mm/dd" max-length="10" ></input>
           
@@ -94,8 +87,7 @@ person_Update_Sp
     <div   class="col-sm-4">
    
             <input type="text"   class="form-control" id="txtperson_EditstartTime" placeholder=""  placeholder="" />
-       
-                                                                                       
+                                                                                                
       
                             
     </div>
@@ -106,8 +98,7 @@ person_Update_Sp
     <div   class="col-sm-4">
    
             <input type="text"   class="form-control" id="txtperson_EditsmailBio" placeholder=""  placeholder="" />
-       
-                                                                                       
+                                                                                                
       
                             
     </div>
@@ -115,8 +106,7 @@ person_Update_Sp
       :</label>
     <div   class="col-sm-4">
    
-       
-                  <textarea      class="form-control" id="txtperson_EditsmailHtml" placeholder="" />
+                           <textarea      class="form-control" id="txtperson_EditsmailHtml" placeholder="" />
                                                                                  
       
                             
@@ -127,8 +117,7 @@ person_Update_Sp
       :</label>
     <div   class="col-sm-4">
    
-       
-            <input type="text"   class="form-control white_shadow" id="txtperson_EditfavColor" placeholder="" placeholder="" />
+                     <input type="text"   class="form-control white_shadow" id="txtperson_EditfavColor" placeholder="" placeholder="" />
                                                                                        
       
                             
@@ -137,8 +126,7 @@ person_Update_Sp
       :</label>
     <div   class="col-sm-4">
    
-       
-                                                                              <input type="image"    linkSyntax="\upd\"    id="txtperson_EditoldImage"  Liquid error: Value cannot be null.
+                                                                                       <input type="image"    linkSyntax="\upd\"    id="txtperson_EditoldImage"  Liquid error: Value cannot be null.
 Parameter name: inputplaceholder="" />
                      
       
@@ -150,8 +138,7 @@ Parameter name: inputplaceholder="" />
       :</label>
     <div   class="col-sm-4">
    
-       
-                                                                        <input type="file"       class="form-control" id="txtperson_EditpicImage"     placeholder="" />
+                                                                                 <input type="file"       class="form-control" id="txtperson_EditpicImage"     placeholder="" />
                            
       
                             
@@ -160,8 +147,7 @@ Parameter name: inputplaceholder="" />
       :</label>
     <div   class="col-sm-4">
    
-       
-                                          <input type="CheckBox"  placeholder=""   id="txtperson_EditisBroken" placeholder="" />
+                                                   <input type="CheckBox"  placeholder=""   id="txtperson_EditisBroken" placeholder="" />
                                                          
       
                             
@@ -175,11 +161,14 @@ Parameter name: inputplaceholder="" />
                                                                                                 
     person_Edit.IntForm=function()
     {
+    fromRecords=1;
+    toRecords=9999999999;
+    totalRecords=0;
         document.title='person_Update_Sp';
         window.pageName='person_Edit';
     window.fileUploaded=false;
-                                                                            $('#txtperson_Editgrade').select2({});
-                                        
+                                                                    $('#txtperson_Editgrade').select2({});
+                                    
     cityid=  Select2AjaxInit('txtperson_Editcityid',function(term, page){
     var DataPass=new Object();
     DataPass.PageName='person_Edit';
@@ -188,9 +177,9 @@ Parameter name: inputplaceholder="" />
             DataPass.Parameters.push(toInput('q',term.term));
                     return JSON.stringify(DataPass);
     });
-                                                                                                                                                kamaDatepicker('txtperson_EditdateBrith', { buttonsColor: "red" ,sync:'true',highlightSelectedDay:'true'});
-                                                                                                            TinyMceEditor('txtperson_EditsmailHtml');
-                                                    $('#txtperson_EditfavColor').ColorPicker({
+                                                                                                                                kamaDatepicker('txtperson_EditdateBrith', { buttonsColor: "red" ,sync:'true',highlightSelectedDay:'true'});
+                                                                                                TinyMceEditor('txtperson_EditsmailHtml');
+                                            $('#txtperson_EditfavColor').ColorPicker({
     color: $('#txtperson_EditfavColor').val(),
     onShow: function (colpkr) {
     $(colpkr).fadeIn(500);
@@ -205,12 +194,12 @@ Parameter name: inputplaceholder="" />
     $('#txtperson_EditfavColor').val('#' + hex);
     }
     });
-                                                                                                        
+                                                                                                window.CurrentSerachMethod=person_Edit.Serach;
     }
     $(document).ready(function () {
     person_Edit.IntForm();
         person_Edit.InitStartValues();
-        
+    
     
     });
   </script>

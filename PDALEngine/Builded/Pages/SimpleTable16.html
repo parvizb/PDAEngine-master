@@ -8,19 +8,21 @@
     
     SimpleTable16.IntForm=function()
     {
+    fromRecords=1;
+    toRecords=9999999999;
+    totalRecords=0;
         document.title=' گزینش خودکار در جدول  ';
         window.pageName='SimpleTable16';
     window.fileUploaded=false;
-    
+        window.CurrentSerachMethod=SimpleTable16.Serach;
     }
     $(document).ready(function () {
     SimpleTable16.IntForm();
-        
+    
     
     });
   </script>
 <button type="button" class="btn btn-default" onclick="BackPage()"><i class="fas fa-back"></i>بازگشت</button>
-
 
 <div class="table-responsive">
 <table class="table table-bordered table table-striped">
@@ -28,7 +30,10 @@
  <thead>
  <tr>
 <th><input type="checkbox" id="checkAll" onclick="CheckAllTable(this.checked)"  /></th>
+
+ 
 <th>ردیف</th>
+
  <th  class="Pointer"  ng-click="ChageTableOrder('cityId')"  > <span ng-show="((currentOrder=='cityId') && (rev) )">V</span> <span ng-show="((currentOrder=='cityId') && (!rev) )">^</span>کد شهر</th> 
  <th  class="Pointer"  ng-click="ChageTableOrder('cityTitle')"  > <span ng-show="((currentOrder=='cityTitle') && (rev) )">V</span> <span ng-show="((currentOrder=='cityTitle') && (!rev) )">^</span>عنوان شهر</th> 
  <th  class="Pointer"  ng-click="ChageTableOrder('CITYPop')"  > <span ng-show="((currentOrder=='CITYPop') && (rev) )">V</span> <span ng-show="((currentOrder=='CITYPop') && (!rev) )">^</span>جمعیت </th> 
@@ -37,7 +42,7 @@
    </thead>
      <tr fliterrows="SimpleTable16records" ng-init="record.viewIndex=$index" ng-repeat="record in SimpleTable16records | orderBy:currentOrder :rev | filter:FilterValue " >
 <th><input type="checkbox" tableCheck="yes" id="selected_{{record.rndId}}" onchange="sendCheckboxToRecord(this)"  /></th>
-<td data-label="ردیف">{{$index+1}}</td>
+<td data-label="ردیف">{{$index+1 + (   ( Num(fromRecords)==0 ? 0 : Num(fromRecords-1) )   )  }}</td>
 <td data-label='کد شهر'>{{record.cityId}}</td> 
  
 <td data-label='عنوان شهر'>{{record.cityTitle}}</td> 
@@ -51,7 +56,10 @@
 
  <tbody>
 </table>
-         <form class="form-horizontal" role="form">
+                 <form class="form-horizontal" role="form">
+    
+
+
   <div class="form-group">
  
 
@@ -59,7 +67,7 @@
      <script>
          $(document).ready(function () {
              
-             SimpleTable16.Serach();
+             resetPaging(); SimpleTable16.Serach();
                       });
     
      </script>

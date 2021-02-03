@@ -3,11 +3,11 @@
 {% include "Parameter" %}
 {% if Page.HideDefaultButton != 'Yes' -%}
 {% if (Page.NoneFormParameters == 'True' ) -%} 
-<button type="button" class="btn btn-primary"  onclick="{{Page.name}}.Serach(this)"><i class="fas fa-serach"></i>نمایش</button>
+<button type="button" class="btn btn-primary"  onclick="resetPaging();{{Page.name}}.Serach(this)"><i class="fas fa-serach"></i>نمایش</button>
 {% endif -%}
 <button type="button" class="btn btn-default" onclick="BackPage()"><i class="fas fa-back"></i>بازگشت</button>
 {% endif -%}
-{% include "PageButton" %}
+{% include "PageButton" -%}
 <div class="table-responsive">
 <table class="table table-bordered table table-striped">
 <caption>{% for table in Page.tables -%}  {% if table.BasicFilter == 'Yes' -%} جست و جو : <input  class="form-control" type="text" onkeyup="ResetCheck();" ng-model="FilterValue" placeholder="عبارت مورد نظر جهت جست و جو"  /> {% endif -%}{% endfor -%}</caption>
@@ -16,12 +16,12 @@
 {% for table in Page.tables -%}  {% if table.Selectable == 'Yes' -%}
 <th><input type="checkbox" id="checkAll" onclick="CheckAllTable(this.checked)"  /></th>
 {% endif -%}
-{% 
+
 {% endfor -%}
-{% for table in Page.tabendfor -%}
+ 
 {% for table in Page.tables -%}  {% if table.RowNumberColumn == 'Yes' -%}
 <th>ردیف</th>
-{% endif -%}les -%}
+{% endif -%} 
 {% for col in table.columns -%}
 {% if (col.type == 'DisplayValue')  or (col.type == 'Image')  or (col.type == 'Html')  or (col.type == 'RunningTotalValues') or (col.type == 'InputTextArea')     or (col.type == 'RangeValues') or (col.type == 'Html') or  (col.type == 'DownloadFile')   or  (col.type == 'Expr') or     (col.type == 'Money') or  (col.type == 'InputDate') or  (col.type == 'InputSelect2Ajax') or  (col.type == 'InputSelect2') or  (col.type == 'InputCombo')  or  (col.type == 'InputString')  or  (col.type == 'InputInteger')  or  (col.type == 'InputFloat')  or  (col.type == 'InputMoney')  or  (col.type == 'InputCombo') or  (col.type == 'Boolean') -%}
  <th  {% if table.Sortable == 'Yes' -%} {% if col.Width != '' -%}width='{{col.Width}}'{% endif -%} class="Pointer"  ng-click="ChageTableOrder('{{col.name}}')"  {% endif -%} > {% if table.Sortable == 'Yes' -%}<span ng-show="((currentOrder=='{{col.name}}') && (rev) )">V</span> <span ng-show="((currentOrder=='{{col.name}}') && (!rev) )">^</span>{% endif -%} {{col.title}}</th> 
@@ -49,7 +49,7 @@
 <th><input type="checkbox" tableCheck="yes" id="selected_{% raw-%}{{record.rndId}}{% endraw -%}" onchange="sendCheckboxToRecord(this)"  /></th>
 {% endif -%}
 {% if table.RowNumberColumn == 'Yes' -%}
-<td data-label="ردیف">{% raw -%}{{$index+1}}{% endraw -%} </td>
+<td data-label="ردیف">{% raw -%}{{$index+1 + (   ( Num(fromRecords)==0 ? 0 : Num(fromRecords-1) )   )  }}{% endraw -%} </td>
 {% endif -%}
 {% for col in table.columns -%}
 {% if (col.type == 'DisplayValue') -%}
@@ -169,8 +169,19 @@
 
  <tbody>
 </table>
+        {% if Page.Paging == "Yes"  -%}
+     {% raw %} ردیف  {{fromRecords}} الی {{toRecords }} از {{totalRecords}}  ردیف   {% endraw -%}
+    
+        <span   ng-repeat="p in pagingArray" type="button"   > <a style="cursor:pointer" ng-show="{% raw %}{{p.showit}}{% endraw -%}"  pager rowstart="{% raw %} {{p.start}}{% endraw -%}"  onclick="goPaging($(this).attr('rowstart'))" > {% raw %} <span ng-show="{{p.isCurrent}}!=true">{{p.caption}}</span> <span ng-show="{{p.isCurrent}}">[{{p.caption}}]</span>  {% endraw -%} </a></span> <div style="display:inline-block;width:200px " > <select style="width:100px !important" id="rowCountSelect" width="100px" rowcount onchange="GenPagingLinks();toRecords=fromRecords+ parseInt($(this).val())-1;setTimeout( CurrentSerachMethod,500);" class="form-control" >
+           <option value="10" >10</option><option value="20" >20</option> <option value="50" >50</option><option value="100" >100</option>
+                                                                       </select></div>
+     <button class="btn btn-default" ng-show="((fromRecords!=1) || (toRecords!=totalRecords))" onclick="fromRecords=1;toRecords=totalRecords;window.PagingMover();setTimeout( CurrentSerachMethod,500);" > نمایش همه </button>
+        {% endif -%}
      {% for table in Page.tables -%}
     <form class="form-horizontal" role="form">
+    
+
+
 {% assign i=0 -%}
   <div class="form-group">
  
@@ -192,7 +203,7 @@
      <script>
          $(document).ready(function () {
              {% if (Page.NoneFormParameters == 'False' ) -%} 
-             {{Page.name}}.Serach();
+             resetPaging(); {{Page.name}}.Serach();
              {% endif -%}
          });
     

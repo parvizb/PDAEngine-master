@@ -263,7 +263,16 @@ namespace PDALEngine
             }
             else
             {
-                return cur.Attributes[attr].Value.ToString();
+                string rx= cur.Attributes[attr].Value.ToString();
+                if (rx.StartsWith("@@") == true)
+                {
+                  rx=  PDAL.ComputeExpr(  rx.Substring(2),null, null).ToString();
+
+                }
+
+            
+
+                return rx;
             }
             return "";
         }
@@ -345,7 +354,21 @@ namespace PDALEngine
                     if(action=="SelectAll")
                     {
                         Sb.Append("Select * from [" + tableName +"]" );
+                        if (paras.Length > 2)
+                        {
+                            Sb.Append(" Where ");
+                        }
+                        for (int k = 2; k < paras.Length; k += 2)
+                        {
+                            if (k != 2)
+                            {
 
+                                Sb.Append(" and  ");
+                            }
+
+                            Sb.Append("[" + paras[k] + "]=" + "@" + paras[k + 1]);
+                        }
+                        Sb.Append(" ");
 
                     }
                        if(action=="SelectOne")
@@ -1501,7 +1524,10 @@ namespace PDALEngine
                 }
 
             }
-
+            if (name == null)
+            {
+                return null;
+            }
             return PDAL.PageAccess[name];
 
         }
@@ -1510,8 +1536,6 @@ namespace PDALEngine
             if (HttpContext.Current.Session[key] != null)
             {
                return   HttpContext.Current.Session[key].ToString();
-
-
             }
             else
             {
@@ -1950,8 +1974,8 @@ namespace PDALEngine
 
         }
 
-
-    
+        public static Dictionary<string, string> Vars = new Dictionary<string, string>();
+     
 
         public static void ConvertValues(Page page, List<inputParameter> Paras)
         {
@@ -2083,6 +2107,16 @@ namespace PDALEngine
 
                 }
                 args.Result = Convertor.Decrypt(val, val);
+            }
+            if (name == "Var")
+            {
+                args.Result = Vars[args.Parameters[0].ParsedExpression.ToString()];
+
+            }
+            if (name == "Sys")
+            {
+                args.Result = GetSpecValue(args.Parameters[0].ParsedExpression.ToString());
+
             }
             return ;
         }

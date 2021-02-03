@@ -28,6 +28,82 @@
 
 
 }
+var pagingArray = new Array();
+
+function GenPagingLinks() {
+    pagingArray = new Array();
+    var q = $('[rowcount]');
+    if (q.length == 0) {
+        return;
+    }
+    else {
+        var counter = parseInt(q.val());
+        var i = 1;
+        var j = 1;
+        while (i <= totalRecords) {
+            pagingArray.push({ start: i, end: i + counter ,caption:j , isCurrent:  i==fromRecords  ,showit :  Math.abs (  i - (fromRecords)  ) <(10*counter)    });
+            i += counter;
+            j += 1;
+        }
+
+        if (toRecords > totalRecords) {
+            toRecords = totalRecords;
+        }
+        if (pagingArray.length > 0) {
+            pagingArray[0].showit = true;
+            pagingArray[pagingArray.length - 1].showit = true;
+        }
+        currentScope.pagingArray = pagingArray;
+        currentScope.PaginCounter = counter;
+        PagingMover();
+    }
+
+}
+function PagingMover() {
+
+    currentScope.fromRecords = fromRecords;
+    currentScope.toRecords = toRecords;
+    currentScope.totalRecords = totalRecords;
+ 
+    currentScope.$apply({});
+}
+function goPaging(start) {
+    
+    fromRecords =parseInt( start);
+    var q = $('[rowcount]');
+    if (q.length == 0) {
+        toRecords = 9999999999999999;
+    }
+    else {
+        toRecords =  fromRecords + parseInt(q.val()) - 1;
+
+    }
+ 
+    window.CurrentSerachMethod();
+    PagingMover();
+}
+
+
+
+function resetPaging() {
+    fromRecords = 1;
+    pagingArray = new Array();
+    currentScope.pagingArray = pagingArray;
+    var q= $('[rowcount]');
+    if(q.length==0)
+    {
+        toRecords=9999999999999999;
+    }
+    else
+    {
+        toRecords =fromRecords + parseInt( q.val()  )-1;
+    }
+    totalRecords = 0;
+}
+var fromRecords = 1;
+var toRecords = 999999999999;
+var totalRecords = 0;
+
 var Validator = new Object();
 var Messager = new Object();
 Messager.errors = new Array();
@@ -199,10 +275,9 @@ Messager.ShowInfo = function (title) {
     $('#myModal').modal()
 }
 function LoadCache() {
-    
+  
         if (Dic[document.title] != null) {
-            currentScope.records = Dic[document.title];
-            currentScope.$apply();
+            CurrentSerachMethod(null, Dic[document.title]);
         }
         
  
@@ -826,7 +901,8 @@ var tit = null;
 var Dic = new Array();
 function StoreCache() {
   
-  Dic[document.title]= currentScope.records;
+
+
 }
 function GenStyleForTableResponse() {
     var d = document.getElementsByTagName('table');
@@ -914,3 +990,6 @@ function ExportCsv() {
     link.click();
     document.body.removeChild(link);
 }
+
+
+var EntitySerach = new Array();

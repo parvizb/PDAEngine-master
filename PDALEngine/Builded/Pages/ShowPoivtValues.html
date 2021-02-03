@@ -11,22 +11,24 @@
         document.title='جدول با ستون های متغیر ';
         window.pageName='ShowPoivtValues';
     window.fileUploaded=false;
-    
+        window.CurrentSerachMethod=ShowPoivtValues.Serach;
     }
     $(document).ready(function () {
     ShowPoivtValues.IntForm();
-        
+    
     
     });
   </script>
 <button type="button" class="btn btn-default" onclick="BackPage()"><i class="fas fa-back"></i>بازگشت</button>
-
 
 <div class="table-responsive">
 <table class="table table-bordered table table-striped">
 <caption></caption>
  <thead>
  <tr>
+
+ 
+
  <th  > شهر مقصد</th> 
                   
     <th ng-repeat="col in  ShowPoivtValuesPoivtData.columns"   > {{col}}</th>  

@@ -8,25 +8,30 @@
     
     SimpleTable4.IntForm=function()
     {
+    fromRecords=1;
+    toRecords=9999999999;
+    totalRecords=0;
         document.title='جدول ساده با دستور مستقیم   ';
         window.pageName='SimpleTable4';
     window.fileUploaded=false;
-    
+        window.CurrentSerachMethod=SimpleTable4.Serach;
     }
     $(document).ready(function () {
     SimpleTable4.IntForm();
-        
+    
     
     });
   </script>
 <button type="button" class="btn btn-default" onclick="BackPage()"><i class="fas fa-back"></i>بازگشت</button>
-
 
 <div class="table-responsive">
 <table class="table table-bordered table table-striped">
 <caption></caption>
  <thead>
  <tr>
+
+ 
+
  <th  > کد شهر</th> 
  <th  > عنوان شهر</th> 
                
@@ -44,7 +49,10 @@
 
  <tbody>
 </table>
-         <form class="form-horizontal" role="form">
+                 <form class="form-horizontal" role="form">
+    
+
+
   <div class="form-group">
  
 
@@ -52,7 +60,7 @@
      <script>
          $(document).ready(function () {
              
-             SimpleTable4.Serach();
+             resetPaging(); SimpleTable4.Serach();
                       });
     
      </script>

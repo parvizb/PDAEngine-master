@@ -109,23 +109,27 @@ CustomRecords.Validate= function()
 }
 
 
-CustomRecords.Serach=function(obj)
+CustomRecords.Serach=function(obj,data)
 {
     $(obj).attr('disabled',true);
-    if(CustomRecords.Validate()==false)
-    {
-        $(obj).attr('disabled',false);
-        return ;
+    if(data==null){
+        if(CustomRecords.Validate()==false)
+        {
+            $(obj).attr('disabled',false);
+            return ;
+        }
     }
-
     window.CurrentSerachMethod=CustomRecords.Serach;
     var Entity=new Object();
+    if(data==null){
     Entity.PageName='CustomRecords';
     Entity.Parameters=new Array();
-     
-TableViewAjax('getTableViewRecords',Entity,function(data){
+     }
+TableViewAjax('getTableViewRecords',(data!=null?data: Entity),function(data){
           
     currentScope.CustomRecordsrecords= data.records;
+    
+
           
     setTimeout(StoreCache, 200);
     currentScope.$apply(function(){});
@@ -154,6 +158,7 @@ return;
 
 
 }
+
 window.targetElement=null;
 
 

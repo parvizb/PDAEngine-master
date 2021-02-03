@@ -8,25 +8,30 @@
     
     SimpleTable13.IntForm=function()
     {
+    fromRecords=1;
+    toRecords=9999999999;
+    totalRecords=0;
         document.title='تغییر در مقادیر به صورت آفلاین';
         window.pageName='SimpleTable13';
     window.fileUploaded=false;
-    
+        window.CurrentSerachMethod=SimpleTable13.Serach;
     }
     $(document).ready(function () {
     SimpleTable13.IntForm();
-        
+    
     
     });
   </script>
 <button type="button" class="btn btn-default" onclick="BackPage()"><i class="fas fa-back"></i>بازگشت</button>
-
 
 <div class="table-responsive">
 <table class="table table-bordered table table-striped">
 <caption></caption>
  <thead>
  <tr>
+
+ 
+
  <th  > فی</th> 
  <th  > تعداد</th> 
  <th  > جمع</th> 
@@ -47,7 +52,10 @@
 
  <tbody>
 </table>
-         <form class="form-horizontal" role="form">
+                 <form class="form-horizontal" role="form">
+    
+
+
   <div class="form-group">
  
 
@@ -55,7 +63,7 @@
      <script>
          $(document).ready(function () {
              
-             SimpleTable13.Serach();
+             resetPaging(); SimpleTable13.Serach();
                       });
     
      </script>

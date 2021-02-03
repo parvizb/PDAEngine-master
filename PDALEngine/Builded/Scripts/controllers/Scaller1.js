@@ -121,25 +121,34 @@ Scaller1.Validate= function()
 }
 
 
-Scaller1.Serach=function(obj)
+Scaller1.Serach=function(obj,dataP)
 {
     $(obj).attr('disabled',true);
-    if(Scaller1.Validate()==false)
-    {
-        $(obj).attr('disabled',false);
-        return ;
+    if(dataP==null){
+        if(Scaller1.Validate()==false)
+        {
+            $(obj).attr('disabled',false);
+            return ;
+        }
     }
-
     window.CurrentSerachMethod=Scaller1.Serach;
     var Entity=new Object();
+    if(dataP===undefined){
     Entity.PageName='Scaller1';
     Entity.Parameters=new Array();
                     
-                        
-         
-TableViewAjax('getTableViewRecords',Entity,function(data){
+        
+
+                
+        
+
+}
+ 
+TableViewAjax('getTableViewRecords',(dataP!==undefined?dataP: Entity),function(data){
           
     currentScope.Scaller1records= data.records;
+        totalRecords= data.RecordTotal;
+    GenPagingLinks();
         setTimeout(StoreCache, 200);
     currentScope.$apply(function(){});
     if(dlgScope!=null)
@@ -166,6 +175,10 @@ return;
 
 
 }
+
+
+
+
 window.targetElement=null;
 
 

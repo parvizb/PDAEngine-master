@@ -26,6 +26,7 @@ public class xml : ILiquidizable
         }
 
     }
+
     public object ToLiquid()
     {
         return Hash.FromAnonymousObject(new { version = this.version, encoding = this.encoding });
@@ -77,8 +78,6 @@ public static class ValidatorChecker
             {
                 pr = "\r\n هیچ موردی به عنوان  " + title +  " تعین نشده " ;
             }
-                 
-             
 
         }
         if (pr != "")
@@ -212,6 +211,13 @@ public class Application : ILiquidizable
                 Temp.ParseEle(node.ChildNodes[i]);
                 Pagess.Add(Temp);
             }
+            if (node.ChildNodes[i].Name == "Var")
+            {
+                PDAL.Vars.Add(node.ChildNodes[i].Attr("Name"), node.ChildNodes[i].Attr("Value"));
+     
+
+
+            }
             if (node.ChildNodes[i].Name == "DontBuild")
             {
                 DontBuild Temp = new DontBuild();
@@ -285,6 +291,7 @@ public class Application : ILiquidizable
     }
 
 }
+ 
 public class BatchCommand : ILiquidizable
 {
     public string name;
@@ -552,7 +559,8 @@ public class Check : ILiquidizable
 
     }
 
-}
+}
+
 /// <summary>
 ///ساختار منو
 /// </summary>
@@ -778,8 +786,10 @@ public class DBSelectCommandParameter : ILiquidizable
     {
         return Hash.FromAnonymousObject(new { Parameter=this.Parameter, name = this.name, source = this.source });
 
-    }
-}
+    }
+
+}
+
 
 
 public class Page : ILiquidizable
@@ -800,7 +810,9 @@ public class Page : ILiquidizable
     public string ShowCond;
     public string SubmitBev;
     public string isDailog;
-
+    public string Paging;
+    public string PagingCountCommand;
+    public string SerachPrevValuesInBack;
     public List<Note> Notes = new List<Note>();
  
     public List<PageParameter> PageParameters = new List<PageParameter>();
@@ -813,7 +825,8 @@ public class Page : ILiquidizable
     public Boolean NoneFormParameters = false;
     public Boolean MustSendFiles = false;
     public string HideDefaultButton = "";
-
+    public int ValSize = 0;
+    public int HerSize = 0;
     public void ParseEle(XmlNode node)
     {
         string ExtendedFrom = node.Attr("ExtendedFrom");
@@ -838,6 +851,10 @@ public class Page : ILiquidizable
         this.SubmitBevParameter = node.Attr("SubmitBevParameter");
         this.ValueDbCommand = node.Attr("ValueDbCommand");
         this.JSStart = node.Attr("JSStart");
+        this.Paging = node.Attr("Paging");
+        this.PagingCountCommand = node.Attr("PagingCountCommand");
+        
+        this.SerachPrevValuesInBack = node.Attr("SerachPrevValuesInBack");
         this.SubmitBev = node.Attr("SubmitBev");
         for (int i = 0; i < node.ChildNodes.Count; i++)
         {
@@ -908,12 +925,8 @@ public class Page : ILiquidizable
                 }
             }
         }
-
-    }
-    public object ToLiquid()
-    {
         string DBComParaUsage = "";/* PDASys.CreateParameterUsage(DBCommand);*/
-        int h=0, v=0;
+        int h = 0, v = 0;
         switch (int.Parse(this.ColumnCount))
         {
             case 1:
@@ -933,11 +946,64 @@ public class Page : ILiquidizable
                 v = 2;
                 break;
             default:
-           h= (int)Math.Floor( ((12f / float.Parse(ColumnCount)) * .75f));
-                v= (int)Math.Floor( ((12f / float.Parse(ColumnCount)) * .25f));
+                h = (int)Math.Floor(((12f / float.Parse(ColumnCount)) * .75f));
+                v = (int)Math.Floor(((12f / float.Parse(ColumnCount)) * .25f));
                 break;
         }
-        return Hash.FromAnonymousObject(new {HideDefaultButton=this.HideDefaultButton,isDailog=this.isDailog,ShowCond=this.ShowCond,SubmitBev=this.SubmitBev,SubmitBevParameter=this.SubmitBevParameter , Notes=this.Notes, MustSendFiles=this.MustSendFiles.ToString() ,  BatchCommands=this.BatchCommands ,NoneFormParameters=this.NoneFormParameters.ToString(),JSStart=this.JSStart,HerSize =h, ValSize =v, Title = this.Title, id = this.id, link = this.link, ColumnCount = this.ColumnCount, PerKey = this.PerKey, type = this.type, DBCommand = this.DBCommand,  name = this.name, queryString = this.queryString, ValueDbCommand = this.ValueDbCommand, PageParameters = this.PageParameters, Buttons = this.Buttons, tables = this.tables, ValueParameters = this.ValueParameters,CustomValidates=this.CustomValidates });
+
+        foreach (PageParameter pg in PageParameters)
+        {
+            if (pg.PutOnAllSpace != "Yes")
+            {
+                pg.ValSize = v;
+                pg.HerSize = h;
+
+            }
+            else
+            {
+
+                switch (int.Parse(this.ColumnCount))
+                {
+                    case 1:
+                        pg.ValSize = 9;
+                pg.HerSize = 3;
+                        break;
+                    case 2:
+                   pg.ValSize = 10;
+                pg.HerSize = 2;
+                        break;
+                    case 3:
+                           pg.ValSize = 10;
+                pg.HerSize = 2;
+                        break;
+                    case 4:
+                        h = 1;
+                        v = 2;
+                        break;
+                    default:
+                        
+                        break;
+                }
+
+
+
+
+               
+
+            }
+
+        }
+
+    }
+
+
+
+    public object ToLiquid()
+    {
+       
+
+
+        return Hash.FromAnonymousObject(new { Paging=this.Paging,PagingCountCommand=this.PagingCountCommand, SerachPrevValuesInBack = this.SerachPrevValuesInBack, HideDefaultButton = this.HideDefaultButton, isDailog = this.isDailog, ShowCond = this.ShowCond, SubmitBev = this.SubmitBev, SubmitBevParameter = this.SubmitBevParameter, Notes = this.Notes, MustSendFiles = this.MustSendFiles.ToString(), BatchCommands = this.BatchCommands, NoneFormParameters = this.NoneFormParameters.ToString(), JSStart = this.JSStart, HerSize = this.HerSize, ValSize = this.ValSize, Title = this.Title, id = this.id, link = this.link, ColumnCount = this.ColumnCount, PerKey = this.PerKey, type = this.type, DBCommand = this.DBCommand, name = this.name, queryString = this.queryString, ValueDbCommand = this.ValueDbCommand, PageParameters = this.PageParameters, Buttons = this.Buttons, tables = this.tables, ValueParameters = this.ValueParameters, CustomValidates = this.CustomValidates });
 
     }
 
@@ -989,9 +1055,11 @@ public void ParseEle(XmlNode node) {
 
       }
 
-  }
+  }
 
- 
+
+ 
+
 
 
 public class PageParameter : ILiquidizable
@@ -1033,6 +1101,9 @@ public class PageParameter : ILiquidizable
     public string ShowCond;
     public List<Button> Buttons = new List<Button>();
     public string CustomControllType = "";
+    public string PutOnAllSpace = "";
+    public int HerSize;
+    public int ValSize;
     public void ParseEle(XmlNode node)
     {
         string ExtendedFrom = node.Attr("ExtendedFrom");
@@ -1051,7 +1122,7 @@ public class PageParameter : ILiquidizable
         this.AjaxActionReturnValuesParameterSyntax = node.Attr("AjaxActionReturnValuesParameterSyntax");
         this.AjaxActionReturnValuesTitleColumn = node.Attr("AjaxActionReturnValuesTitleColumn");
         this.AjaxActionReturnValuesValueColumn = node.Attr("AjaxActionReturnValuesValueColumn");
-
+        this.PutOnAllSpace = node.Attr("PutOnAllSpace");
         this.source = node.Attr("source");
         this.Disabled = node.Attr("Disabled");
         this.DBSelect2CommandDriectValue = node.Attr("DBSelect2CommandDriectValue");
@@ -1160,7 +1231,7 @@ public class PageParameter : ILiquidizable
     }
     public object ToLiquid()
     {
-        return Hash.FromAnonymousObject(new { CustomControllInitValue = this.CustomControllInitValue, CustomControllhtml = this.CustomControllhtml, CustomControllval = this.CustomControllval, CustomControllgetValue = this.CustomControllgetValue, CustomControllsetValue = this.CustomControllsetValue, AjaxActionReturnValuesName = this.AjaxActionReturnValuesName, AjaxActionReturnValuesParameterSyntax = this.AjaxActionReturnValuesParameterSyntax, AjaxActionReturnValuesTitleColumn = this.AjaxActionReturnValuesTitleColumn, AjaxActionReturnValuesValueColumn = this.AjaxActionReturnValuesValueColumn, SaveFileNameExpr = this.SaveFileNameExpr, DBSelect2CommandDriectValueParameterName = this.DBSelect2CommandDriectValueParameterName, DBSelect2CommandDriectValue = this.DBSelect2CommandDriectValue, ChangeBevParameter = this.ChangeBevParameter, Buttons = this.Buttons, ShowCond = this.ShowCond, ChangeBev = this.ChangeBev, PlaceHolder = this.PlaceHolder, Width = this.Width, Height = this.Height, LinkSyntax = this.LinkSyntax, FileAllows = this.FileAllows, FilePathAtServer = this.FilePathAtServer, MaxFileSize = this.MaxFileSize, Disabled = this.Disabled, dontSendToDb = this.dontSendToDb, options = this.options, TitleParameter = this.TitleParameter, title = this.title, name = this.name, type = this.type, source = this.source, DefaultValueSource = this.DefaultValueSource, DefaultValueParameter = this.DefaultValueParameter, sorurceParameter = this.sorurceParameter, startValueType = this.startValueType, Parameter = this.Parameter, DBSelect2Command = this.DBSelect2Command, codeColumn = this.codeColumn, textColumn = this.textColumn, ParameterChecks = this.ParameterChecks, DBSelectCommandParameters = this.DBSelectCommandParameters });
+        return Hash.FromAnonymousObject(new { ValSize=this.ValSize,HerSize=this.HerSize, PutOnAllSpace = this.PutOnAllSpace, CustomControllInitValue = this.CustomControllInitValue, CustomControllhtml = this.CustomControllhtml, CustomControllval = this.CustomControllval, CustomControllgetValue = this.CustomControllgetValue, CustomControllsetValue = this.CustomControllsetValue, AjaxActionReturnValuesName = this.AjaxActionReturnValuesName, AjaxActionReturnValuesParameterSyntax = this.AjaxActionReturnValuesParameterSyntax, AjaxActionReturnValuesTitleColumn = this.AjaxActionReturnValuesTitleColumn, AjaxActionReturnValuesValueColumn = this.AjaxActionReturnValuesValueColumn, SaveFileNameExpr = this.SaveFileNameExpr, DBSelect2CommandDriectValueParameterName = this.DBSelect2CommandDriectValueParameterName, DBSelect2CommandDriectValue = this.DBSelect2CommandDriectValue, ChangeBevParameter = this.ChangeBevParameter, Buttons = this.Buttons, ShowCond = this.ShowCond, ChangeBev = this.ChangeBev, PlaceHolder = this.PlaceHolder, Width = this.Width, Height = this.Height, LinkSyntax = this.LinkSyntax, FileAllows = this.FileAllows, FilePathAtServer = this.FilePathAtServer, MaxFileSize = this.MaxFileSize, Disabled = this.Disabled, dontSendToDb = this.dontSendToDb, options = this.options, TitleParameter = this.TitleParameter, title = this.title, name = this.name, type = this.type, source = this.source, DefaultValueSource = this.DefaultValueSource, DefaultValueParameter = this.DefaultValueParameter, sorurceParameter = this.sorurceParameter, startValueType = this.startValueType, Parameter = this.Parameter, DBSelect2Command = this.DBSelect2Command, codeColumn = this.codeColumn, textColumn = this.textColumn, ParameterChecks = this.ParameterChecks, DBSelectCommandParameters = this.DBSelectCommandParameters });
 
     }
     public void GenCustomControll(string Type)

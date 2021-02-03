@@ -6,8 +6,7 @@
       :</label>
     <div   class="col-sm-4">
    
-       
-                                                                                       
+                                                                                                
       
                   <select class="form-control" id="txtSimpleTable17PerId" ></select>
                       
@@ -16,8 +15,7 @@
       :</label>
     <div   class="col-sm-4">
    
-       
-                                                                                       
+                                                                                                
       
                               <input  type="text"    onBlur="ReformatDate('txtSimpleTable17DateSave')"  class="form-control" id="txtSimpleTable17DateSave" placeholder="yyyy/mm/dd" max-length="10" ></input>
           
@@ -31,6 +29,9 @@
                 
     SimpleTable17.IntForm=function()
     {
+    fromRecords=1;
+    toRecords=9999999999;
+    totalRecords=0;
         document.title='جدول های اصل و جزیئات ';
         window.pageName='SimpleTable17';
     window.fileUploaded=false;
@@ -43,12 +44,12 @@
             DataPass.Parameters.push(toInput('q',term.term));
                     return JSON.stringify(DataPass);
     });
-                                                kamaDatepicker('txtSimpleTable17DateSave', { buttonsColor: "red" ,sync:'true',highlightSelectedDay:'true'});
-                        
+                                            kamaDatepicker('txtSimpleTable17DateSave', { buttonsColor: "red" ,sync:'true',highlightSelectedDay:'true'});
+                        window.CurrentSerachMethod=SimpleTable17.Serach;
     }
     $(document).ready(function () {
     SimpleTable17.IntForm();
-        
+    
     
     });
   </script>
@@ -56,12 +57,14 @@
 <a onclick='SimpleTable17.InsertRecord()' ><button type="button" class="btn btn-default" > ردیف جدید</button></a>
 <a onclick='SimpleTable17.Save()' ><button type="button" class="btn btn-default" > ثبت</button></a>
 
-
 <div class="table-responsive">
 <table class="table table-bordered table table-striped">
 <caption></caption>
  <thead>
  <tr>
+
+ 
+
  <th  > شهر</th> 
 <th>
     عملیات
@@ -95,7 +98,10 @@
 
  <tbody>
 </table>
-         <form class="form-horizontal" role="form">
+                 <form class="form-horizontal" role="form">
+    
+
+
   <div class="form-group">
  
 
@@ -103,7 +109,7 @@
      <script>
          $(document).ready(function () {
              
-             SimpleTable17.Serach();
+             resetPaging(); SimpleTable17.Serach();
                       });
     
      </script>

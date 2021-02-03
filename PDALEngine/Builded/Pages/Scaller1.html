@@ -9,8 +9,7 @@
     <div   class="col-sm-4">
    
             <input type="text"   class="form-control" id="txtScaller1cityTitle" placeholder=""  placeholder="" />
-       
-                                                                                       
+                                                                                                
       
                             
     </div>
@@ -18,8 +17,7 @@
       :</label>
     <div   class="col-sm-4">
    
-       
-                                                      <input type="Text"  onkeypress="return blockNonIntNumber(event)" placeholder="" moneytype="yes"  onkeyup="NumberInput(event,this)" class="form-control" id="txtScaller1CITYPop" placeholder="" />
+                                                               <input type="Text"  onkeypress="return blockNonIntNumber(event)" placeholder="" moneytype="yes"  onkeyup="NumberInput(event,this)" class="form-control" id="txtScaller1CITYPop" placeholder="" />
                                              
       
                             
@@ -32,14 +30,17 @@
                     
     Scaller1.IntForm=function()
     {
+    fromRecords=1;
+    toRecords=9999999999;
+    totalRecords=0;
         document.title='اعتبارسنجی';
         window.pageName='Scaller1';
     window.fileUploaded=false;
-                                                                    
+                                                                window.CurrentSerachMethod=Scaller1.Serach;
     }
     $(document).ready(function () {
     Scaller1.IntForm();
-        
+    
     
     });
   </script>

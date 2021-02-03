@@ -8,19 +8,21 @@
     
     SimpleTable6.IntForm=function()
     {
+    fromRecords=1;
+    toRecords=9999999999;
+    totalRecords=0;
         document.title='جدول ساده با قابلیت انتخاب ';
         window.pageName='SimpleTable6';
     window.fileUploaded=false;
-    
+        window.CurrentSerachMethod=SimpleTable6.Serach;
     }
     $(document).ready(function () {
     SimpleTable6.IntForm();
-        
+    
     
     });
   </script>
 <button type="button" class="btn btn-default" onclick="BackPage()"><i class="fas fa-back"></i>بازگشت</button>
-
 
 <div class="table-responsive">
 <table class="table table-bordered table table-striped">
@@ -28,6 +30,9 @@
  <thead>
  <tr>
 <th><input type="checkbox" id="checkAll" onclick="CheckAllTable(this.checked)"  /></th>
+
+ 
+
  <th  class="Pointer"  ng-click="ChageTableOrder('cityId')"  > <span ng-show="((currentOrder=='cityId') && (rev) )">V</span> <span ng-show="((currentOrder=='cityId') && (!rev) )">^</span>کد شهر</th> 
  <th  class="Pointer"  ng-click="ChageTableOrder('cityTitle')"  > <span ng-show="((currentOrder=='cityTitle') && (rev) )">V</span> <span ng-show="((currentOrder=='cityTitle') && (!rev) )">^</span>عنوان شهر</th> 
                
@@ -46,7 +51,10 @@
 
  <tbody>
 </table>
-         <form class="form-horizontal" role="form">
+                 <form class="form-horizontal" role="form">
+    
+
+
   <div class="form-group">
  
 
@@ -54,7 +62,7 @@
      <script>
          $(document).ready(function () {
              
-             SimpleTable6.Serach();
+             resetPaging(); SimpleTable6.Serach();
                       });
     
      </script>

@@ -190,39 +190,74 @@ person_Edit.Validate= function()
 }
 
 
-person_Edit.Serach=function(obj)
+person_Edit.Serach=function(obj,dataP)
 {
     $(obj).attr('disabled',true);
-    if(person_Edit.Validate()==false)
-    {
-        $(obj).attr('disabled',false);
-        return ;
+    if(dataP==null){
+        if(person_Edit.Validate()==false)
+        {
+            $(obj).attr('disabled',false);
+            return ;
+        }
     }
-
     window.CurrentSerachMethod=person_Edit.Serach;
     var Entity=new Object();
+    if(dataP===undefined){
     Entity.PageName='person_Edit';
     Entity.Parameters=new Array();
                 Entity.Parameters.push( toInput('id',routeParams.id ));
+
+
                 
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                    Entity.Parameters.push( toInput('smailHtml',tinymce.editors['txtperson_EditsmailHtml'].contentDocument.body.innerHTML));
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+            Entity.Parameters.push( toInput('smailHtml',tinymce.editors['txtperson_EditsmailHtml'].contentDocument.body.innerHTML));
     
-                        
-                        
-                        
-                        
-         
-TableViewAjax('getTableViewRecords',Entity,function(data){
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+}
+ 
+TableViewAjax('getTableViewRecords',(dataP!==undefined?dataP: Entity),function(data){
           
     currentScope.person_Editrecords= data.records;
+        totalRecords= data.RecordTotal;
+    GenPagingLinks();
         setTimeout(StoreCache, 200);
     currentScope.$apply(function(){});
     if(dlgScope!=null)
@@ -249,6 +284,10 @@ return;
 
 
 }
+
+
+
+
 window.targetElement=null;
 person_Edit.InitStartValues=function(){
     var Entity=new Object();

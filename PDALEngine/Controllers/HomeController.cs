@@ -7,6 +7,7 @@ using System.IO;
 using System.Data.SqlClient;
 using System.Data;
 using System.Xml;
+using System.Data.OleDb;
 namespace PDALEngine.Controllers
 {
     
@@ -15,7 +16,7 @@ namespace PDALEngine.Controllers
         public int code;
         public string Message;
         public string retrunValue;
-
+        public int RecordTotal;
     }
 
     public class HomeController : Controller
@@ -31,8 +32,14 @@ namespace PDALEngine.Controllers
 
         public string CustomScaler(string Command, string pageName, inputParameter[] para)
         {
+            if (Command == "$SaveData")
+            {
+               DataSet Dx= GetExcelDataSet(Server.MapPath("~\\temp.xls"));
 
-            throw new Exception("پیاده سازی نشده");
+
+               return "";
+            }
+            return "پیاده سازی نشده";
         }
         public class DataReturnsObject
         {
@@ -142,6 +149,39 @@ namespace PDALEngine.Controllers
 
 
         }
+
+
+        private DataSet GetExcelDataSet(string path)
+        {
+            string sheetName;
+            string ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + path +
+                                  ";Extended Properties=\"Excel 12.0;HDR=YES\"";
+            DataSet ds = new DataSet();
+            using (OleDbConnection con = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand cmd = new OleDbCommand())
+                {
+                    using (OleDbDataAdapter oda = new OleDbDataAdapter())
+                    {
+                        cmd.Connection = con;
+                        con.Open();
+                        DataTable dtExcelSchema = con.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                        for (int i = 0; i < dtExcelSchema.Rows.Count; i++)
+                        {
+                            sheetName = dtExcelSchema.Rows[i]["TABLE_NAME"].ToString();
+                            DataTable dt = new DataTable(sheetName);
+                            cmd.Connection = con;
+                            cmd.CommandText = "SELECT * FROM [" + sheetName + "]";
+                            oda.SelectCommand = cmd;
+                            oda.Fill(dt);
+                            dt.TableName = sheetName;
+                            ds.Tables.Add(dt);
+                        }
+                    }
+                }
+            }
+            return ds;
+        }
         public ActionResult Index()
         {
             DateTime CreateTime = new FileInfo(Server.MapPath("~/PDA.Config")).LastWriteTime;
@@ -174,6 +214,7 @@ namespace PDALEngine.Controllers
             if (needToBuildFiles)
             {
                 XmlValidator.err.Clear();
+                PDAL.Vars.Clear();
                 PDAL.BuildApp();
                 System.IO.File.WriteAllText(Server.MapPath("~/builded.dat"), "");
             }
@@ -517,7 +558,18 @@ namespace PDALEngine.Controllers
                 Res.Message = "با موفقیت انجام شد";
                 if (Info.DBCommand.StartsWith("$") == false)
                 {
-                    Res.retrunValue = PDAL.DataTableToJson(PDAL.ReadRecords(ref Info.DBCommand, PDAL.SkipParameters(Info, Parameters)), Res.code, "");
+                    DataTable Dt= PDAL.ReadRecords(ref Info.DBCommand, PDAL.SkipParameters(Info, Parameters));
+                    Res.retrunValue = PDAL.DataTableToJson(Dt, Res.code, "");
+                    if (Info.PagingCountCommand != "")
+                    {
+                        Res.RecordTotal = int.Parse(PDAL.ExecScaller(ref Info.PagingCountCommand, PDAL.SkipParameters(Info, Parameters)));
+
+                    }
+                    else
+                    {
+                        Res.RecordTotal = Dt.Rows.Count;
+
+                    }
                 }
                 else
                 {

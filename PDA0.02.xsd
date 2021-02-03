@@ -9859,7 +9859,20 @@ zhihu
       </xs:enumeration>
     </xs:restriction>
   </xs:simpleType>
-
+  <xs:simpleType name="PagingMode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None">
+        <xs:annotation>
+          <xs:documentation>بدون صفحه بندی</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Offline">
+        <xs:annotation>
+          <xs:documentation>آفلاین همه داده واکشی می شوند و صفحه بندی توسط جاوا اسکرپیت انجام میشود</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="ForTypeCommand">
     <xs:restriction base="xs:string">
       <xs:enumeration value="OneTime">
@@ -10291,6 +10304,11 @@ zhihu
       <xs:enumeration value="Expr">
         <xs:annotation>
           <xs:documentation>از یک عبارت فرمولی استفاده شود</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Paging">
+        <xs:annotation>
+          <xs:documentation>متغیر های مربوط به صفحه بندی</xs:documentation>
         </xs:annotation>
       </xs:enumeration>
     </xs:restriction>
@@ -10771,6 +10789,26 @@ zhihu
             </xs:choice>
           </xs:complexType>
         </xs:element>
+        <xs:element name="Var" >
+          <xs:complexType>
+            <xs:annotation>
+              <xs:documentation>تعریف متغیر</xs:documentation>
+            </xs:annotation>
+            <xs:attribute name="Name" type="xs:string" >
+              <xs:annotation>
+                <xs:documentation>نام</xs:documentation>
+              </xs:annotation>
+              
+            </xs:attribute>
+            <xs:attribute name="Value" type="xs:string" >
+              <xs:annotation>
+                <xs:documentation>
+                  مقدار
+                </xs:documentation>
+              </xs:annotation>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
         <xs:element name="Pages">
           <xs:complexType>
                <xs:annotation><xs:documentation> گروه صفحات </xs:documentation> </xs:annotation>
@@ -11005,9 +11043,15 @@ zhihu
                                   <xs:documentation>نام بایستی با نام ستون ردیف های دریافتی یکی باشد</xs:documentation>
                                 </xs:annotation>
                               </xs:attribute>
+                              
                               <xs:attribute name="AjaxActionChange" type="xs:string" use="optional">
                                 <xs:annotation>
                                   <xs:documentation>تغییر ردیف بر اساس یک اقدام ajax </xs:documentation>
+                                </xs:annotation>
+                              </xs:attribute>
+                              <xs:attribute name="Icon" type="Icon" use="optional">
+                                <xs:annotation>
+                                  <xs:documentation>تصویر کنار گزینه</xs:documentation>
                                 </xs:annotation>
                               </xs:attribute>
                               <xs:attribute name="StaticJavaScriptAfterChange" type="xs:string" use="optional">
@@ -11098,11 +11142,17 @@ zhihu
                             <xs:documentation>آیا جدول قابل مرتب کردن باشد</xs:documentation>
                           </xs:annotation>
                         </xs:attribute>
+                            <xs:attribute name="PagingMode" type="PagingMode" use="optional">
+                          <xs:annotation>
+                            <xs:documentation>حالت صفحه بندی</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
                         <xs:attribute name="HideActionColumnn" type="YesNo" use="optional">
                           <xs:annotation>
                             <xs:documentation>ستون عملیات مخفی شود</xs:documentation>
                           </xs:annotation>
                         </xs:attribute>
+                     
                         <xs:attribute name="PoivtTable" type="YesNo" use="optional">
                           <xs:annotation>
                             <xs:documentation>جدول به صورت محوری ایجاد شود با ستون ها و رکورد های متغیر</xs:documentation>
@@ -11334,7 +11384,7 @@ zhihu
                             <xs:documentation>نام</xs:documentation>
                           </xs:annotation>
                         </xs:attribute>
-                        <xs:attribute name="CustomControllType" type="xs:string" use="required">
+                        <xs:attribute name="CustomControllType" type="xs:string" use="optional">
                           <xs:annotation>
                             <xs:documentation>نوع کنترل سفارشی </xs:documentation>
                           </xs:annotation>
@@ -11387,6 +11437,12 @@ zhihu
                             <xs:documentation>منبع پارامتر چه باشد</xs:documentation>
                           </xs:annotation>
                         </xs:attribute>
+                        <xs:attribute name="PutOnAllSpace" type="YesNo" use="optional">
+                          <xs:annotation>
+                            <xs:documentation>کل فضای ردیف اشغال  کند</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+
                         <xs:attribute name="sorurceParameter" type="xs:string" use="optional">
                           <xs:annotation>
                             <xs:documentation>پارامتر مربوط به منبع پارامتر</xs:documentation>
@@ -11698,6 +11754,16 @@ zhihu
                                   <xs:documentation>نام روال بانک اطلاعاتی جهت اجرا </xs:documentation>
                                 </xs:annotation>
                               </xs:attribute>
+                              <xs:attribute name="Paging" type="YesNo" use="optional">
+                                <xs:annotation>
+                                  <xs:documentation>صفحه بندی فعال باشد </xs:documentation>
+                                </xs:annotation>
+                              </xs:attribute>
+                              <xs:attribute name="PagingCountCommand" type="xs:string" use="optional">
+                                <xs:annotation>
+                                  <xs:documentation>نام تابعی تعداد کل را نگه می دارد</xs:documentation>
+                                </xs:annotation>
+                              </xs:attribute>
                               <xs:attribute name="SelectionParameter" type="xs:string" use="optional">
                                 <xs:annotation>
                                   <xs:documentation>پارامتر گزینش  </xs:documentation>
@@ -11744,6 +11810,11 @@ zhihu
                       <xs:documentation>آیا کادر باز می باشد </xs:documentation>
                     </xs:annotation>
                   </xs:attribute>
+                  <xs:attribute name="SerachPrevValuesInBack" type="YesNo" use="optional">
+                    <xs:annotation>
+                      <xs:documentation>در زمان برگشت به صفحه محتوا جدول براساس آخرین پارامتر ورودی بازیابی شوند</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
                   <xs:attribute name="name" type="xs:string" use="required">
                     <xs:annotation>
                       <xs:documentation>نام</xs:documentation>
@@ -11782,6 +11853,16 @@ zhihu
                   <xs:attribute name="DBCommand" type="xs:string" use="required">
                     <xs:annotation>
                       <xs:documentation>دستور مورد نیاز برای نمایش یا اجرا</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="Paging" type="YesNo" use="optional">
+                    <xs:annotation>
+                      <xs:documentation>صفحه بندی برای نمایش جدول فعال باشد</xs:documentation>
+                    </xs:annotation>
+                  </xs:attribute>
+                  <xs:attribute name="PagingCountCommand" type="xs:string" use="optional">
+                    <xs:annotation>
+                      <xs:documentation>نام روال بانک اطلاعاتی جهت دریافت تعداد کلی رکورد بکار می رود</xs:documentation>
                     </xs:annotation>
                   </xs:attribute>
                   <xs:attribute name="ExtendedFrom" type="xs:string" use="optional">

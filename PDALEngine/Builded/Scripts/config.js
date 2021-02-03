@@ -325,12 +325,6 @@ function ($routeProvider/*, $locationProvider*/) {
             ).
     
                 
-    when('/CustomRecords', {
-        templateUrl: 'CustomRecords.htm',
-        controller: 'mainController' }
-            ).
-    
-                
     when('/SimpleTable2', {
         templateUrl: 'SimpleTable2.htm',
         controller: 'mainController' }
@@ -492,20 +486,20 @@ function ($routeProvider/*, $locationProvider*/) {
             ).
     
                 
-    when('/ScallerReturnValue', {
-        templateUrl: 'ScallerReturnValue.htm',
+    when('/UsingIcon', {
+        templateUrl: 'UsingIcon.htm',
         controller: 'mainController' }
             ).
     
                 
-    when('/CopyingAttr', {
-        templateUrl: 'CopyingAttr.htm',
+    when('/PoivtTable', {
+        templateUrl: 'PoivtTable.htm',
         controller: 'mainController' }
             ).
     
                 
-    when('/ShowPoivtValues', {
-        templateUrl: 'ShowPoivtValues.htm',
+    when('/Paging', {
+        templateUrl: 'Paging.htm',
         controller: 'mainController' }
             ).
     
@@ -517,18 +511,3 @@ function ($routeProvider/*, $locationProvider*/) {
 }]);
 
 
-function Not_Not1()
-{
-    AjaxActions.GetPop_asTable(function(records){
-      
-        if(records.length>=1)
-        {
-            
-            ConfirmAsk('خوش آمدید تست اعلان',function(){goToLink("#SimpleTable1")});
-
-        }
-    },'1');
-
-        setTimeout("Not_Not1",60000*10);
-    }
-    

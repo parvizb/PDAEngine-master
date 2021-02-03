@@ -12,25 +12,30 @@
     
     Scaller5.IntForm=function()
     {
+    fromRecords=1;
+    toRecords=9999999999;
+    totalRecords=0;
         document.title='جدول ساده بدون پارامتر';
         window.pageName='Scaller5';
     window.fileUploaded=false;
-    
+        window.CurrentSerachMethod=Scaller5.Serach;
     }
     $(document).ready(function () {
     Scaller5.IntForm();
-        
+    
     
     });
   </script>
 <button type="button" class="btn btn-default" onclick="BackPage()"><i class="fas fa-back"></i>بازگشت</button>
-
 
 <div class="table-responsive">
 <table class="table table-bordered table table-striped">
 <caption></caption>
  <thead>
  <tr>
+
+ 
+
  <th  > کد شهر</th> 
  <th  > عنوان شهر</th> 
                
@@ -48,7 +53,10 @@
 
  <tbody>
 </table>
-         <form class="form-horizontal" role="form">
+                 <form class="form-horizontal" role="form">
+    
+
+
   <div class="form-group">
  
 
@@ -56,7 +64,7 @@
      <script>
          $(document).ready(function () {
              
-             Scaller5.Serach();
+             resetPaging(); Scaller5.Serach();
                       });
     
      </script>

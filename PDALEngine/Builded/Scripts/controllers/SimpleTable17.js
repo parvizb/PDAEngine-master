@@ -115,25 +115,34 @@ SimpleTable17.Validate= function()
 }
 
 
-SimpleTable17.Serach=function(obj)
+SimpleTable17.Serach=function(obj,dataP)
 {
     $(obj).attr('disabled',true);
-    if(SimpleTable17.Validate()==false)
-    {
-        $(obj).attr('disabled',false);
-        return ;
+    if(dataP==null){
+        if(SimpleTable17.Validate()==false)
+        {
+            $(obj).attr('disabled',false);
+            return ;
+        }
     }
-
     window.CurrentSerachMethod=SimpleTable17.Serach;
     var Entity=new Object();
+    if(dataP===undefined){
     Entity.PageName='SimpleTable17';
     Entity.Parameters=new Array();
                     
-                        
-         
-TableViewAjax('getTableViewRecords',Entity,function(data){
+        
+
+                
+        
+
+}
+ 
+TableViewAjax('getTableViewRecords',(dataP!==undefined?dataP: Entity),function(data){
           
     currentScope.SimpleTable17records= data.records;
+        totalRecords= data.RecordTotal;
+    GenPagingLinks();
           
     setTimeout(StoreCache, 200);
     currentScope.$apply(function(){});
@@ -162,6 +171,10 @@ return;
 
 
 }
+
+
+
+
 window.targetElement=null;
 
 
@@ -318,11 +331,25 @@ ScallerAjax('BatchCommand',Enity,function(data){
                  
          
     }
-    $(obj).attr('disabled',false);
+    try
+    {
+        $(obj).attr('disabled',false);
+    }
+    catch
+    {
+
+    }
     return;
 },function(data)
 {
-    $(obj).attr('disabled',false);
+    try
+    {
+        $(obj).attr('disabled',false);
+    }
+    catch
+    {
+
+    }
     return;
 });
 console.log(JSON.stringify(Enity));

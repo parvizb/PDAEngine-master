@@ -109,23 +109,28 @@ OtherInformation.Validate= function()
 }
 
 
-OtherInformation.Serach=function(obj)
+OtherInformation.Serach=function(obj,dataP)
 {
     $(obj).attr('disabled',true);
-    if(OtherInformation.Validate()==false)
-    {
-        $(obj).attr('disabled',false);
-        return ;
+    if(dataP==null){
+        if(OtherInformation.Validate()==false)
+        {
+            $(obj).attr('disabled',false);
+            return ;
+        }
     }
-
     window.CurrentSerachMethod=OtherInformation.Serach;
     var Entity=new Object();
+    if(dataP===undefined){
     Entity.PageName='OtherInformation';
     Entity.Parameters=new Array();
-     
-TableViewAjax('getTableViewRecords',Entity,function(data){
+    }
+ 
+TableViewAjax('getTableViewRecords',(dataP!==undefined?dataP: Entity),function(data){
           
     currentScope.OtherInformationrecords= data.records;
+        totalRecords= data.RecordTotal;
+    GenPagingLinks();
         setTimeout(StoreCache, 200);
     currentScope.$apply(function(){});
     if(dlgScope!=null)
@@ -152,6 +157,10 @@ return;
 
 
 }
+
+
+
+
 window.targetElement=null;
 
 

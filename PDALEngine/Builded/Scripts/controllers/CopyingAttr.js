@@ -117,25 +117,29 @@ CopyingAttr.Validate= function()
 }
 
 
-CopyingAttr.Serach=function(obj)
+CopyingAttr.Serach=function(obj,data)
 {
     $(obj).attr('disabled',true);
-    if(CopyingAttr.Validate()==false)
-    {
-        $(obj).attr('disabled',false);
-        return ;
+    if(data==null){
+        if(CopyingAttr.Validate()==false)
+        {
+            $(obj).attr('disabled',false);
+            return ;
+        }
     }
-
     window.CurrentSerachMethod=CopyingAttr.Serach;
     var Entity=new Object();
+    if(data==null){
     Entity.PageName='CopyingAttr';
     Entity.Parameters=new Array();
                     
                         
-         
-TableViewAjax('getTableViewRecords',Entity,function(data){
+         }
+TableViewAjax('getTableViewRecords',(data!=null?data: Entity),function(data){
           
     currentScope.CopyingAttrrecords= data.records;
+    
+
         setTimeout(StoreCache, 200);
     currentScope.$apply(function(){});
     if(dlgScope!=null)
@@ -162,6 +166,7 @@ return;
 
 
 }
+
 window.targetElement=null;
 
 

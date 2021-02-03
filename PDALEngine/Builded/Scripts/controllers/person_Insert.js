@@ -9,7 +9,7 @@ person_Insert.sendFiles=  function()
 {
     var data = new FormData();
  
-                                                                                                                    var tmp=$('#txtperson_InsertpicImage')[0];
+                                                                                                    var tmp=$('#txtperson_InsertpicImage')[0];
     if(tmp.files.length>0){
         data.append('picImage', tmp.files[0]);
     }
@@ -78,11 +78,7 @@ person_Insert.Submit= function(obj)
     
                     Entity.Parameters.push( toInput('cityid',$('#txtperson_Insertcityid').val()));
     
-                    Entity.Parameters.push( toInput('cityidtravel',$('#txtperson_Insertcityidtravel').val()));
-    
                     Entity.Parameters.push( toInput('sextype',$('#txtperson_Insertsextype').val()));
-    
-                    Entity.Parameters.push( toInput('likes',$('#txtperson_Insertlikes').val()));
     
                     Entity.Parameters.push( toInput('salaryBase',$('#txtperson_InsertsalaryBase').val()));
     
@@ -141,8 +137,6 @@ person_Insert.Validate= function()
                                                                 Validator.CheckRegSelect2('txtperson_Insertcityid','شهر');
                                     
                                                                                     
-                                                                                    
-            
                                                                 Validator.CheckRegInteger('txtperson_InsertsalaryBase','حقوق پایه');
                                                             
                                                         Validator.CheckRegFloat('txtperson_InsertexamResult','نمره آزمون');
@@ -199,39 +193,68 @@ person_Insert.Validate= function()
 }
 
 
-person_Insert.Serach=function(obj)
+person_Insert.Serach=function(obj,dataP)
 {
     $(obj).attr('disabled',true);
-    if(person_Insert.Validate()==false)
-    {
-        $(obj).attr('disabled',false);
-        return ;
+    if(dataP==null){
+        if(person_Insert.Validate()==false)
+        {
+            $(obj).attr('disabled',false);
+            return ;
+        }
     }
-
     window.CurrentSerachMethod=person_Insert.Serach;
     var Entity=new Object();
+    if(dataP===undefined){
     Entity.PageName='person_Insert';
     Entity.Parameters=new Array();
                     
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                    Entity.Parameters.push( toInput('smailHtml',tinymce.editors['txtperson_InsertsmailHtml'].contentDocument.body.innerHTML));
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+            Entity.Parameters.push( toInput('smailHtml',tinymce.editors['txtperson_InsertsmailHtml'].contentDocument.body.innerHTML));
     
-                        
-                        
-                        
-         
-TableViewAjax('getTableViewRecords',Entity,function(data){
+        
+
+                
+        
+
+                
+        
+
+                
+        
+
+}
+ 
+TableViewAjax('getTableViewRecords',(dataP!==undefined?dataP: Entity),function(data){
           
     currentScope.person_Insertrecords= data.records;
+        totalRecords= data.RecordTotal;
+    GenPagingLinks();
         setTimeout(StoreCache, 200);
     currentScope.$apply(function(){});
     if(dlgScope!=null)
@@ -258,113 +281,12 @@ return;
 
 
 }
+
+
+
+
 window.targetElement=null;
 
 
 
-person_Insert.SaveMultiValue_Validate=function()
-{
-    Validator.ClearErrors();
-                            if(typeof ( currentScope.person_Insertrecords)!="undefined") {
-    for (var l=0;l<currentScope.person_Insertrecords.length;l++)
-{
-    var r=currentScope.person_Insertrecords[l];
-
-        if(r.selected == true){
-      continue;
-}
-}
-}
-if(typeof ( currentScope.person_Insertrecords)!="undefined") {
-for(var l=0;l<currentScope.person_Insertrecords.length;l++)
-{ 
-    var record=currentScope.person_Insertrecords[l];
-    
-}
-}
-
-
-
-
-
-if (Messager.errors.length!=0)
-{
-    Validator.ShowErrors();
-    return false;
-}
-return true;
-}
-person_Insert.SaveMultiValue=function()
-{ 
-    if(  person_Insert.SaveMultiValue_Validate()==false)
-    {
-        return ;
-    }
-    var DataPass=new Array();
-      
-    var t=new Array();
-    var  informationRecords=new Array()
-    var NullFix=new Array();
-    NullFix.push(toInput('fake','NULL'));
-    informationRecords.push(NullFix);
-    var arr=$('#txtperson_Insertcityidtravel').val();
-for (var l=0;l<arr.length;l++)
-{
-    var rec=new Array();//hi
-    var r=arr[l];
-
-var rec=new Array();//hi com
-
-
-
-rec.push(toInput('q', ( r)));
-informationRecords.push(rec);
-
-
-}
-t.push(informationRecords);
-DataPass.push(t);
-var Enity=new Object();
-Enity.PageName='person_Insert';
-Enity.CommandName='SaveMultiValue';
-Enity.records=DataPass;
-ScallerAjax('BatchCommand',Enity,function(data){
-
-    
-    Messager.ShowMessage('اطلاعات', data.Message );
- 
-     
-  
- 
-
-    Messager.ShowMessage('اطلاعات', data.Message);
-    if(JsEventInterface.AfterOkReqSubmit!=null)
-    {
-        JsEventInterface.AfterOkReqSubmit(Entity,data);
-    }
-    ///you are asl
-    if(data.code==0)
-    {
-        window.returnValue=data.retrunValue;
-
-
-
-
-                      
-         
-         
-     
-                        BackPage();
-                 
-         
-    }
-    $(obj).attr('disabled',false);
-    return;
-},function(data)
-{
-    $(obj).attr('disabled',false);
-    return;
-});
-console.log(JSON.stringify(Enity));
-}
 

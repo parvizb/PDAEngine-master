@@ -10,25 +10,30 @@
     
     SimpleTable14.IntForm=function()
     {
+    fromRecords=1;
+    toRecords=9999999999;
+    totalRecords=0;
         document.title='تغییر در مقادیر ردیف جدول به صورت آنلاین   ';
         window.pageName='SimpleTable14';
     window.fileUploaded=false;
-    
+        window.CurrentSerachMethod=SimpleTable14.Serach;
     }
     $(document).ready(function () {
     SimpleTable14.IntForm();
-        
+    
     
     });
   </script>
 <button type="button" class="btn btn-default" onclick="BackPage()"><i class="fas fa-back"></i>بازگشت</button>
-
 
 <div class="table-responsive">
 <table class="table table-bordered table table-striped">
 <caption>جست و جو : <input  class="form-control" type="text" onkeyup="ResetCheck();" ng-model="FilterValue" placeholder="عبارت مورد نظر جهت جست و جو"  /> </caption>
  <thead>
  <tr>
+
+ 
+
  <th  width='50%'class="Pointer"  ng-click="ChageTableOrder('cityid')"  > <span ng-show="((currentOrder=='cityid') && (rev) )">V</span> <span ng-show="((currentOrder=='cityid') && (!rev) )">^</span>شهر</th> 
  <th  width='50%'class="Pointer"  ng-click="ChageTableOrder('CITYPop')"  > <span ng-show="((currentOrder=='CITYPop') && (rev) )">V</span> <span ng-show="((currentOrder=='CITYPop') && (!rev) )">^</span>جمعیت</th> 
                
@@ -49,7 +54,10 @@
 
  <tbody>
 </table>
-         <form class="form-horizontal" role="form">
+                 <form class="form-horizontal" role="form">
+    
+
+
   <div class="form-group">
  
 
@@ -57,7 +65,7 @@
      <script>
          $(document).ready(function () {
              
-             SimpleTable14.Serach();
+             resetPaging(); SimpleTable14.Serach();
                       });
     
      </script>

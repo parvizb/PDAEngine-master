@@ -109,23 +109,27 @@ ShowPoivtValues.Validate= function()
 }
 
 
-ShowPoivtValues.Serach=function(obj)
+ShowPoivtValues.Serach=function(obj,data)
 {
     $(obj).attr('disabled',true);
-    if(ShowPoivtValues.Validate()==false)
-    {
-        $(obj).attr('disabled',false);
-        return ;
+    if(data==null){
+        if(ShowPoivtValues.Validate()==false)
+        {
+            $(obj).attr('disabled',false);
+            return ;
+        }
     }
-
     window.CurrentSerachMethod=ShowPoivtValues.Serach;
     var Entity=new Object();
+    if(data==null){
     Entity.PageName='ShowPoivtValues';
     Entity.Parameters=new Array();
-     
-TableViewAjax('getTableViewRecords',Entity,function(data){
+     }
+TableViewAjax('getTableViewRecords',(data!=null?data: Entity),function(data){
           
     currentScope.ShowPoivtValuesrecords= data.records;
+    
+
             currentScope.ShowPoivtValuesPoivtData = PovitTableMake( currentScope.ShowPoivtValuesrecords,'citytitle','acity','val');
 currentScope.ShowPoivtValuesrecords=  currentScope.ShowPoivtValuesPoivtData.RealDatas ;
   
@@ -158,6 +162,7 @@ return;
 
 
 }
+
 window.targetElement=null;
 
 

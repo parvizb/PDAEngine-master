@@ -8,14 +8,17 @@
     
     Scaller4.IntForm=function()
     {
+    fromRecords=1;
+    toRecords=9999999999;
+    totalRecords=0;
         document.title='جدول ساده بدون پارامتر';
         window.pageName='Scaller4';
     window.fileUploaded=false;
-    
+        window.CurrentSerachMethod=Scaller4.Serach;
     }
     $(document).ready(function () {
     Scaller4.IntForm();
-        
+    
     
     });
   </script>
@@ -25,12 +28,14 @@
 <a onclick='ExportXls();' ><button type="button" class="btn btn-default" > گرفتن خروجی اکسل</button></a>
 <a onclick='alert("PDAL IS MY FRIEND");' ><button type="button" class="btn btn-default" > اجرای جاوا اسکرپیت</button></a>
 
-
 <div class="table-responsive">
 <table class="table table-bordered table table-striped">
 <caption></caption>
  <thead>
  <tr>
+
+ 
+
  <th  > کد شهر</th> 
  <th  > عنوان شهر</th> 
                
@@ -48,7 +53,10 @@
 
  <tbody>
 </table>
-         <form class="form-horizontal" role="form">
+                 <form class="form-horizontal" role="form">
+    
+
+
   <div class="form-group">
  
 
@@ -56,7 +64,7 @@
      <script>
          $(document).ready(function () {
              
-             Scaller4.Serach();
+             resetPaging(); Scaller4.Serach();
                       });
     
      </script>

@@ -3,7 +3,11 @@
   <div class="form-group">
 {% for para in  Page.PageParameters -%}
 {% if Para.source == 'form' -%}
-    <label {% if Para.ShowCond !='' %} ng-show='{{Para.ShowCond}}' {% endif %} for="{{Para.name}}" class="col-sm-{{Page.HerSize}} control-label">     {% for chk in  Para.ParameterChecks -%} {% if chk.Cond == 'Reg' -%}<span class="red" >*</span>  {% endif -%} {% endfor -%}
+{% if Para.PutOnAllSpace == 'Yes' -%}
+     </div>
+     <div class="form-group">
+{% endif -%}
+    <label {% if Para.ShowCond !='' %} ng-show='{{Para.ShowCond}}' {% endif %} for="{{Para.name}}" class="col-sm-{{Para.HerSize}} control-label">     {% for chk in  Para.ParameterChecks -%} {% if chk.Cond == 'Reg' -%}<span class="red" >*</span>  {% endif -%} {% endfor -%}
       {{Para.title}}
       {% for btn in  Para.Buttons -%}
       {% if btn.action == 'goToPage'  -%}
@@ -59,7 +63,7 @@
       {% endif -%}
       {% endfor -%}
 :</label>
-    <div  {% if Para.ShowCond !='' %} ng-show='{{Para.ShowCond}}' {% endif %} class="col-sm-{{Page.ValSize}}">
+    <div  {% if Para.ShowCond !='' %} ng-show='{{Para.ShowCond}}' {% endif %} class="col-sm-{{Para.ValSize}}">
    
       {% if Para.type == 'String' -%}
       <input type="text"   class="form-control" id="txt{{Page.name}}{{Para.name}}" placeholder="{{Para.PlaceHolder}}"  {% if  Para.Disabled == 'Yes'  -%} disabled='' {% endif -%}  {% if  Para.ChangeBev == 'ReCalcExprs'  -%} onchange='RecalcScopes();' {% endif -%}{% if  Para.ChangeBev == 'JavaScript'  -%} onchange='{{Para.ChangeBevParameter}}' {% endif -%} placeholder="{{Para.PlaceHolder}}" />
@@ -134,7 +138,7 @@
     
     </div>
 {% assign i = i | plus: 1 -%}
-{% if i == Page.ColumnCount -%}
+{% if i == Page.ColumnCount or Para.PutOnAllSpace == 'Yes' -%}
      </div>
      <div class="form-group">
 {% assign i = 0 -%}
@@ -160,6 +164,9 @@
 
     {{Page.name}}.IntForm=function()
     {
+    fromRecords=1;
+    toRecords=9999999999;
+    totalRecords=0;
     {% if Page.isDailog !='Yes' -%}
     document.title='{{Page.title}}';
     {% endif -%}
@@ -202,9 +209,9 @@
     {% if Para.type == 'Html' -%}
     TinyMceEditor('txt{{Page.name}}{{Para.name}}');
     {% endif -%}
-        {% if Para.type == 'CustomControll' -%}
-        {{Para.CustomControllInitValue}}
-        {% endif -%}
+    {% if Para.type == 'CustomControll' -%}
+    {{Para.CustomControllInitValue}}
+    {% endif -%}
     {% if Para.type == 'Color' -%}
     $('#txt{{Page.name}}{{Para.name}}').ColorPicker({
     color: $('#txt{{Page.name}}{{Para.name}}').val(),
@@ -223,14 +230,14 @@
     });
     {% endif -%}
     {% endfor -%}
-
+    window.CurrentSerachMethod={{Page.name}}.Serach;
     }
     $(document).ready(function () {
     {{Page.name}}.IntForm();
     {% if Page.ValueDbCommand != '' -%}
     {{Page.name}}.InitStartValues();
     {% endif -%}
-    
+
     {{Page.JSStart}}
     });
   </script>

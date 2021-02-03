@@ -268,17 +268,19 @@ ScallerAjax('ScallerSubmit',Entity,function(data){
 }
 
 
-{{Page.name}}.Serach=function(obj)
+{{Page.name}}.Serach=function(obj,dataP)
 {
     $(obj).attr('disabled',true);
-    if({{Page.name}}.Validate()==false)
-    {
-        $(obj).attr('disabled',false);
-        return ;
+    if(dataP==null){
+        if({{Page.name}}.Validate()==false)
+        {
+            $(obj).attr('disabled',false);
+            return ;
+        }
     }
-
     window.CurrentSerachMethod={{Page.name}}.Serach;
     var Entity=new Object();
+    if(dataP===undefined){
     Entity.PageName='{{Page.name}}';
     Entity.Parameters=new Array();
     {% for para in  Page.PageParameters -%}
@@ -296,11 +298,23 @@ ScallerAjax('ScallerSubmit',Entity,function(data){
     {% if para.source == 'QueryString' -%}
     Entity.Parameters.push( toInput('{{para.name}}',routeParams.{{para.Parameter}} ));
 {% endif -%}
+{% if para.source == 'Paging' -%}
+
+Entity.Parameters.push( toInput('{{para.name}}',{% if para.sorurceParameter == 'Start' -%} fromRecords {% endif -%}{% if para.sorurceParameter == 'To' -%} toRecords {% endif -%} ));
+{% endif -%}
+
+
 {% endfor -%}
+}
  
-TableViewAjax('getTableViewRecords',Entity,function(data){
+TableViewAjax('getTableViewRecords',(dataP!==undefined?dataP: Entity),function(data){
           
     currentScope.{{Page.name}}records= data.records;
+    {% if Page.SerachPrevValuesInBack =="Yes" -%}
+    Dic['{{Page.title}}']= (dataP!=undefined?dataP: Entity);
+    {% endif -%}
+    totalRecords= data.RecordTotal;
+    GenPagingLinks();
     {% for tab in  Page.tables -%}
     {% if tab.PoivtTable =='Yes' -%}
     currentScope.{{Page.name}}PoivtData = PovitTableMake( currentScope.{{Page.name}}records,'{{tab.PoivtRowColumn}}','{{tab.PoivtColumnName}}','{{tab.PoivtValueName}}');
@@ -354,6 +368,10 @@ return;
 
 
 }
+
+
+
+
 window.targetElement=null;
 {% if Page.isDailog == 'Yes' -%}
 {
@@ -817,11 +835,25 @@ ScallerAjax('BatchCommand',Enity,function(data){
         {% endif -%}
  
     }
-    $(obj).attr('disabled',false);
+    try
+    {
+        $(obj).attr('disabled',false);
+    }
+    catch
+    {
+
+    }
     return;
 },function(data)
 {
-    $(obj).attr('disabled',false);
+    try
+    {
+        $(obj).attr('disabled',false);
+    }
+    catch
+    {
+
+    }
     return;
 });
 console.log(JSON.stringify(Enity));
